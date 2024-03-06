@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	DatabaseConnection := database.NewLocalDatabase()
+	DatabaseConnection := database.NewMongoDbDatabase()
 	testService := testServices.NewTestService(&DatabaseConnection)
 
 	http := http.NewHttpServer()
