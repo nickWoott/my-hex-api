@@ -1,6 +1,10 @@
 package testServices
 
-import "github.com/nickWoott/my-hex-api/internal/ports"
+import (
+	"fmt"
+
+	"github.com/nickWoott/my-hex-api/internal/ports"
+)
 
 type TestService struct {
 	DatabaseConnection ports.DatabaseConnection
@@ -12,11 +16,15 @@ func NewTestService(DatabaseConnection ports.DatabaseConnection) TestService {
 	}
 }
 
-func (ts *TestService) GetData(id string) string {
-	storypoint := ts.DatabaseConnection.GetStoryPointById(id)
+func (ts *TestService) GetData(id string) (string, error) {
+	storypoint, err := ts.DatabaseConnection.GetStoryPointById(id)
 
-	// what does this retu
-	//call the function from the secondary adapter
-	return storypoint
+if err != nil {
+	fmt.Println("there was an error")
+	return storypoint, err
+}
+	// what does this return I am not sure 
+	// call the function from the secondary adapter
+	return storypoint, err
 
 }

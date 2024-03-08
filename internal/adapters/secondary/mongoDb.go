@@ -43,7 +43,7 @@ func NewMongoDbDatabase() MongoDbDatabase {
 
 }
 
-func (db *MongoDbDatabase) GetStoryPointById(id string) string {
+func (db *MongoDbDatabase) GetStoryPointById(id string) (string, error) {
 
 	coll := db.client.Database("storypoint-store").Collection("storpoints")
 
@@ -52,7 +52,7 @@ func (db *MongoDbDatabase) GetStoryPointById(id string) string {
 	err := coll.FindOne(context.TODO(), bson.D{{"id", id}}).Decode(&result)
 	if err == mongo.ErrNoDocuments {
 		fmt.Printf("No document was found id of: %s\n", id)
-		return "function did not work"
+		return "", err
 	}
 
 	if err != nil {
@@ -66,5 +66,5 @@ func (db *MongoDbDatabase) GetStoryPointById(id string) string {
 		panic(err)
 	}
 	fmt.Printf("%s\n", jsonData)
-	return string(jsonData)
+	return string(jsonData), nil
 }
