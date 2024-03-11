@@ -4,24 +4,23 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	testServices "github.com/nickWoott/my-hex-api/internal/core/services"
+	"github.com/nickWoott/my-hex-api/internal/core/services"
 )
 
-type TestController struct {
-	service testServices.TestService
+type GetStoryPointController struct {
+	service services.StoryPointService
 }
 
-func NewTestController(service testServices.TestService) TestController {
-	return TestController{
+func NewGetStoryPointController(service services.StoryPointService) GetStoryPointController {
+	return GetStoryPointController{
 		service: service,
 	}
 }
 
-func (tc *TestController) SendTest(c *gin.Context) {
+func (gspc *GetStoryPointController) SendTest(c *gin.Context) {
 
 	id := c.Query("id")
-	fmt.Println(id, "HERE I AM I AM THE ID")
-	idFromService, err := tc.service.GetData(id)
+	idFromService, err := gspc.service.GetData(id)
 	if err != nil {
 	fmt.Println("there has been an error in the controller")
 	}

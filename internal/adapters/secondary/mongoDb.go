@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/nickWoott/my-hex-api/internal/core/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -43,16 +44,16 @@ func NewMongoDbDatabase() MongoDbDatabase {
 
 }
 
-func (db *MongoDbDatabase) GetStoryPointById(id string) (string, error) {
+func (db *MongoDbDatabase) GetStoryPointById(id string) (domain.StorypointRequest, error) {
 
-	coll := db.client.Database("storypoint-store").Collection("storpoints")
+	coll := db.client.Database("storypoint-store").Collection("storypoints")
 
-	var result bson.M
+	var result domain.StorypointRequest
 
 	err := coll.FindOne(context.TODO(), bson.D{{"id", id}}).Decode(&result)
 	if err == mongo.ErrNoDocuments {
 		fmt.Printf("No document was found id of: %s\n", id)
-		return "", err
+		return result, err
 	}
 
 	if err != nil {
@@ -66,5 +67,30 @@ func (db *MongoDbDatabase) GetStoryPointById(id string) (string, error) {
 		panic(err)
 	}
 	fmt.Printf("%s\n", jsonData)
-	return string(jsonData), nil
+	return result, nil
+}
+
+
+//does this also use domain types?
+//I think you can use the domain types in any place, domain types will not change
+func (db *MongoDbDatabase) PostStoryPoint(storypoint domain.StorypointRequest) error {
+
+ coll := db.client.Database("storypoint-store").Collection("storypoints")
+    
+    // Convert domain.StoryPoint to BSON document
+    document := bson.M{
+        "id":      storypoint.Id,
+        "text":    storypoint.Text,
+        "choices": storypoint.Choices,
+        // Add any other fields from domain.StoryPoint as needed
+    }
+    
+    _, err := coll.InsertOne(context.TODO(), document)
+
+    if err != nil {
+        fmt.Printf("Failed to insert story point into database: %v\n", err)
+        return err
+    }
+    
+    return nil
 }

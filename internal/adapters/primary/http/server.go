@@ -2,8 +2,8 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	testController "github.com/nickWoott/my-hex-api/internal/adapters/primary/http/controllers"
-	testServices "github.com/nickWoott/my-hex-api/internal/core/services"
+	"github.com/nickWoott/my-hex-api/internal/adapters/primary/http/controllers"
+	"github.com/nickWoott/my-hex-api/internal/core/services"
 )
 
 type HttpServer struct {
@@ -13,11 +13,16 @@ func NewHttpServer() *HttpServer {
 	return &HttpServer{}
 }
 
-func (s *HttpServer) Run(service testServices.TestService) {
+func (s *HttpServer) Run(service services.StoryPointService) {
 
-	testController := testController.NewTestController(service)
+	postStoryPointController := controllers.NewPostStoryPointController(service)
+
+	getStoryPointController := controllers.NewGetStoryPointController(service)
 	r := gin.Default()
 
-	r.GET("/test", testController.SendTest)
+	r.GET("/storypoint", getStoryPointController.SendTest)
+	r.POST("/storypoint",postStoryPointController.CreateStoryPoints )
 	r.Run("localhost:3000")
+
+
 }

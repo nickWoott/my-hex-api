@@ -3,12 +3,12 @@ package main
 import (
 	"github.com/nickWoott/my-hex-api/internal/adapters/primary/http"
 	database "github.com/nickWoott/my-hex-api/internal/adapters/secondary"
-	testServices "github.com/nickWoott/my-hex-api/internal/core/services"
+	"github.com/nickWoott/my-hex-api/internal/core/services"
 )
 
 func main() {
 	DatabaseConnection := database.NewMongoDbDatabase()
-	testService := testServices.NewTestService(&DatabaseConnection)
+	testService := services.NewStoryPointService(&DatabaseConnection)
 
 	http := http.NewHttpServer()
 
