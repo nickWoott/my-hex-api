@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nickWoott/my-hex-api/internal/core/domain"
 	"github.com/nickWoott/my-hex-api/internal/core/services"
@@ -19,15 +21,16 @@ func NewPostStoryPointController(service services.StoryPointService) PostStoryPo
 func  (pspc *PostStoryPointsController) CreateStoryPoints(c *gin.Context) {
 
 	
-	var si domain.StorypointRequest
+	var si []domain.StorypointRequest
 
 	if err := c.BindJSON(&si); err != nil {
-		println("cannot bind json to storypoint struct")
+		fmt.Println(err, "this is the error upon binding")
+        c.JSON(400, gin.H{"error": "Invalid JSON payload"})
 		return
 	}
 
 
-	if err := pspc.service.SendStoryPoints(&si); err != nil {
+	if err := pspc.service.SendStoryPoints(si); err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}

@@ -44,7 +44,7 @@ func NewMongoDbDatabase() MongoDbDatabase {
 
 }
 
-func (db *MongoDbDatabase) GetStoryPointById(id string) (domain.StorypointRequest, error) {
+func (db *MongoDbDatabase) GetStoryPointById(id int) (domain.StorypointRequest, error) {
 
 	coll := db.client.Database("storypoint-store").Collection("storypoints")
 
@@ -73,19 +73,17 @@ func (db *MongoDbDatabase) GetStoryPointById(id string) (domain.StorypointReques
 
 //does this also use domain types?
 //I think you can use the domain types in any place, domain types will not change
-func (db *MongoDbDatabase) PostStoryPoint(storypoint domain.StorypointRequest) error {
+func (db *MongoDbDatabase) PostStoryPoints(storyPoints []domain.StorypointRequest) error {
 
  coll := db.client.Database("storypoint-store").Collection("storypoints")
+     documents := make([]interface{}, len(storyPoints))
+ for i := range storyPoints {
+	documents[i] = storyPoints[i]
+
+ }
+
     
-    // Convert domain.StoryPoint to BSON document
-    document := bson.M{
-        "id":      storypoint.Id,
-        "text":    storypoint.Text,
-        "choices": storypoint.Choices,
-        // Add any other fields from domain.StoryPoint as needed
-    }
-    
-    _, err := coll.InsertOne(context.TODO(), document)
+    _, err := coll.InsertMany(context.TODO(), documents)
 
     if err != nil {
         fmt.Printf("Failed to insert story point into database: %v\n", err)

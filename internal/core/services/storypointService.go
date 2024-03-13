@@ -17,7 +17,7 @@ func NewStoryPointService(DatabaseConnection ports.DatabaseConnection) StoryPoin
 	}
 }
 
-func (ss *StoryPointService) GetData(id string) (domain.StorypointRequest, error) {
+func (ss *StoryPointService) GetData(id int) (domain.StorypointRequest, error) {
 	storypoint, err := ss.DatabaseConnection.GetStoryPointById(id)
 
 if err != nil {
@@ -29,9 +29,9 @@ if err != nil {
 }
 
 //this may not be true hexagonal architecture, as it uses an interface from the input
-func(ss *StoryPointService) SendStoryPoints(storypoint *domain.StorypointRequest ) (error) {
+func(ss *StoryPointService) SendStoryPoints(storyPoints []domain.StorypointRequest ) (error) {
 
- err := ss.DatabaseConnection.PostStoryPoint(*storypoint) 
+ err := ss.DatabaseConnection.PostStoryPoints(storyPoints) 
  
  if err != nil {
 fmt.Println("error in the service")
