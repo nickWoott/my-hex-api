@@ -1,15 +1,15 @@
 package domain
 
 type Choices struct {
-	Destination string
-	Choice string
+	Destination string `json:"destination"`
+	Choice string `json:"choice"`
 	}
 	
 	
 	type StorypointRequest  struct {
-		Id string
-		Text string 
-		Choices []Choices
+		Id string `json:"id"`
+		Text string `json:"text"`
+		Choices []Choices `json:"choices"`
 		
 	}
 	

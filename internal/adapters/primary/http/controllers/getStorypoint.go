@@ -20,10 +20,10 @@ func NewGetStoryPointController(service services.StoryPointService) GetStoryPoin
 func (gspc *GetStoryPointController) SendTest(c *gin.Context) {
 
 	id := c.Query("id")
-	idFromService, err := gspc.service.GetData(id)
+	storyPoint, err := gspc.service.GetData(id)
 	if err != nil {
 	fmt.Println("there has been an error in the controller")
 	}
 
-	c.JSON(200, gin.H{"message": "I am working", "id": idFromService})
+	c.JSON(200, storyPoint)
 }
