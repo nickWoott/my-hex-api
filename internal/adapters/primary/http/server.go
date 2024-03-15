@@ -24,7 +24,7 @@ func (s *HttpServer) Run(service services.StoryPointService) {
 	r := gin.Default()
 	r.Use(cors.Default())
 	r.GET("/storypoint", getStoryPointController.SendTest)
-	r.POST("/storypoint",postStoryPointController.CreateStoryPoints )
+	r.PUT("/storypoint",postStoryPointController.CreateStoryPoints )
 	r.DELETE("storypoints", deleteAllStoryPointsController.DeleteAllStoryPoints)
 	r.Run("localhost:3001")
 

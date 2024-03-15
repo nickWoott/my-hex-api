@@ -76,21 +76,22 @@ func (db *MongoDbDatabase) GetStoryPointById(id int) (domain.StorypointRequest, 
 func (db *MongoDbDatabase) PostStoryPoints(storyPoints []domain.StorypointRequest) error {
 
  coll := db.client.Database("storypoint-store").Collection("storypoints")
-     documents := make([]interface{}, len(storyPoints))
- for i := range storyPoints {
-	documents[i] = storyPoints[i]
+ 
+ for _, sp := range storyPoints {
+	filter := bson.M{"_id": sp.Id} // Assuming Id is the unique identifier
 
- }
+	// Create an update operation to set the document
+	update := bson.M{"$set": sp}
 
-    
-    _, err := coll.InsertMany(context.TODO(), documents)
+	// Perform the update operation with upsert set to true
+	_, err := coll.UpdateOne(context.TODO(), filter, update, options.Update().SetUpsert(true))
+	if err != nil {
+		fmt.Printf("Failed to update story point in database: %v\n", err)
+		return err
+	}
+}
 
-    if err != nil {
-        fmt.Printf("Failed to insert story point into database: %v\n", err)
-        return err
-    }
-    
-    return nil
+return nil
 }
 
 func(db *MongoDbDatabase) DeleteAllStoryPoints () error {
