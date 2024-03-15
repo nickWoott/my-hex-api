@@ -92,3 +92,17 @@ func (db *MongoDbDatabase) PostStoryPoints(storyPoints []domain.StorypointReques
     
     return nil
 }
+
+func(db *MongoDbDatabase) DeleteAllStoryPoints () error {
+
+	coll := db.client.Database("storypoint-store").Collection("storypoints")
+
+	_, err := coll.DeleteMany(context.TODO(), bson.D{})
+
+	if err != nil {
+		fmt.Println("there was an error deleting all documents")
+	}
+	fmt.Println("all documents deleted from the collection")
+
+	return nil
+}

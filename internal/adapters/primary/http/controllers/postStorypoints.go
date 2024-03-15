@@ -24,7 +24,7 @@ func  (pspc *PostStoryPointsController) CreateStoryPoints(c *gin.Context) {
 	var si []domain.StorypointRequest
 
 	if err := c.BindJSON(&si); err != nil {
-		fmt.Println(err, "this is the error upon binding")
+		fmt.Println("Could not bind JSON request", err)
         c.JSON(400, gin.H{"error": "Invalid JSON payload"})
 		return
 	}

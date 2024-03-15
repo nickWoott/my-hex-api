@@ -41,3 +41,14 @@ return err
 	return nil
 	
 }
+
+func(ss *StoryPointService) DeleteAll() (error) {
+
+	err := ss.DatabaseConnection.DeleteAllStoryPoints()
+
+	if err != nil{
+		return err
+	}
+
+	return nil
+}
